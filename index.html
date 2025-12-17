@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>❄️ Snowfall WebGL - 1000 Snowflakes on ANY Website!</title>
-  <meta name="description" content="WebGL snowfall bookmarklet! 1000 beautiful snowflakes on any website. GPU-accelerated, smooth 60 FPS!">
+  <title>Snowfall WebGL - 1000 Fiocchi di Neve su QUALSIASI Sito!</title>
+  <meta name="description" content="Bookmarklet snowfall WebGL! 1000 bellissimi fiocchi di neve su qualsiasi sito web. GPU-accelerato, 60 FPS fluidi!">
   
   <!-- Open Graph -->
   <meta property="og:title" content="❄️ Snowfall Bookmarklet - Fai Nevicare Ovunque!">
@@ -170,9 +170,15 @@
     
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
     
     .feature {
@@ -268,82 +274,157 @@
 <body>
   
   <div class="container">
-    <h1>❄️ Snowfall WebGL</h1>
-    <p class="subtitle">1000 Snowflakes | WebGL GPU | Any Website</p>
+    <button id="langToggle" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 2px solid #fff; color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+      🇮🇹 IT
+    </button>
+    
+    <h1>❄ Snowfall WebGL</h1>
+    <p class="subtitle" data-lang="subtitle">1000 Fiocchi di Neve | WebGL GPU | Qualsiasi Sito</p>
     
     <div class="bookmarklet-box">
-      <p class="drag-instruction">
-        👇 TRASCINA QUESTO BOTTONE NEI TUOI PREFERITI 👇
+      <p class="drag-instruction" data-lang="drag">
+        ↓ TRASCINA QUESTO BOTTONE NEI TUOI PREFERITI ↓
       </p>
       
-      <a href="javascript:void(fetch('https://snow.digitalengineered.ai/snowfall-webgl.js').then(r=>r.text()).then(eval))" 
+      <a href="javascript:(function(){if(document.getElementById('titan-snow-webgl')){document.getElementById('titan-snow-webgl').remove();return}const canvas=document.createElement('canvas');canvas.id='titan-snow-webgl';canvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999999';document.body.appendChild(canvas);const gl=canvas.getContext('webgl',{alpha:true});if(!gl){alert('WebGL not supported');canvas.remove();return}function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;gl.viewport(0,0,canvas.width,canvas.height)}resize();window.addEventListener('resize',resize);const particles=[];for(let i=0;i<1000;i++){particles.push({x:Math.random()*canvas.width,y:-Math.random()*canvas.height,speed:1+Math.random()*2,size:14+Math.random()*10,opacity:0.6+Math.random()*0.4,sway:Math.random()*Math.PI*2,rotation:Math.random()*Math.PI*2,rotSpeed:(Math.random()-0.5)*0.02})}const tc=document.createElement('canvas');const ctx=tc.getContext('2d');tc.width=tc.height=64;ctx.clearRect(0,0,64,64);ctx.fillStyle='#ffffff';ctx.font='bold 48px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ffffff';ctx.shadowBlur=8;ctx.fillText('❄',32,32);const vs=`attribute vec2 a_position;attribute vec2 a_texCoord;uniform vec2 u_resolution;varying vec2 v_texCoord;void main(){vec2 pos=(a_position/u_resolution)*2.0-1.0;gl_Position=vec4(pos*vec2(1,-1),0,1);v_texCoord=a_texCoord;}`;const fs=`precision mediump float;uniform sampler2D u_texture;uniform float u_opacity;varying vec2 v_texCoord;void main(){vec4 c=texture2D(u_texture,v_texCoord);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`;function cs(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}const vsh=cs(vs,gl.VERTEX_SHADER);const fsh=cs(fs,gl.FRAGMENT_SHADER);const prog=gl.createProgram();gl.attachShader(prog,vsh);gl.attachShader(prog,fsh);gl.linkProgram(prog);gl.useProgram(prog);const posLoc=gl.getAttribLocation(prog,'a_position');const texLoc=gl.getAttribLocation(prog,'a_texCoord');const resLoc=gl.getUniformLocation(prog,'u_resolution');const opLoc=gl.getUniformLocation(prog,'u_opacity');const posBuf=gl.createBuffer();const texBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,texBuf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([0,0,1,0,0,1,1,1]),gl.STATIC_DRAW);const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tc);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);function animate(){if(!document.getElementById('titan-snow-webgl'))return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.uniform2f(resLoc,canvas.width,canvas.height);particles.forEach(p=>{p.y+=p.speed;p.sway+=0.02;p.rotation+=p.rotSpeed;p.x+=Math.sin(p.sway)*0.5;if(p.y>canvas.height+50){p.y=-50;p.x=Math.random()*canvas.width}const hw=p.size/2;const pos=new Float32Array([p.x-hw,p.y-hw,p.x+hw,p.y-hw,p.x-hw,p.y+hw,p.x+hw,p.y+hw]);gl.bindBuffer(gl.ARRAY_BUFFER,posBuf);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.STATIC_DRAW);gl.enableVertexAttribArray(posLoc);gl.vertexAttribPointer(posLoc,2,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,texBuf);gl.enableVertexAttribArray(texLoc);gl.vertexAttribPointer(texLoc,2,gl.FLOAT,false,0,0);gl.bindTexture(gl.TEXTURE_2D,tex);gl.uniform1f(opLoc,p.opacity);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)});requestAnimationFrame(animate)}animate();const n=document.createElement('div');n.textContent='❄ SNOW WEBGL! 1000 snowflakes';n.style.cssText='position:fixed;top:20px;right:20px;background:rgba(0,0,0,.8);color:white;padding:15px 20px;border-radius:10px;font-family:Arial,sans-serif;font-size:14px;z-index:9999999;box-shadow:0 4px 20px rgba(0,0,0,.3)';document.body.appendChild(n);setTimeout(()=>{n.style.transition='opacity 0.3s';n.style.opacity='0';setTimeout(()=>n.remove(),300)},4000)})();" 
          class="bookmarklet-btn"
          onclick="return false;">
-        ❄️ FAI NEVICARE
+        ❄ FAI NEVICARE
       </a>
       
-      <div class="arrow-down">⬇️</div>
+      <div class="arrow-down">↓</div>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%); border: 3px solid #fff; border-radius: 20px; padding: 2rem; margin: 2rem 0; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.3);">
+      <p style="font-size: 1.8rem; font-weight: 900; color: #fff; margin: 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);" data-lang="engineering">
+        Questa è ingegneria.<br>WebGL nativo, 1000 particelle, 60 FPS garantiti.
+      </p>
     </div>
     
     <div class="instructions">
-      <h2>📖 Come usarlo</h2>
+      <h2 data-lang="instrTitle">→ Come usarlo</h2>
       <ol>
-        <li><strong>Trascina</strong> il bottone "❄️ FAI NEVICARE" nella barra dei preferiti del tuo browser</li>
-        <li><strong>Vai</strong> su qualsiasi sito (Facebook, LinkedIn, Twitter, qualsiasi pagina!)</li>
-        <li><strong>Clicca</strong> il bookmark nella barra</li>
-        <li><strong>BOOM!</strong> Neve ovunque! ❄️</li>
-        <li><strong>Clicca di nuovo</strong> per fermare la neve</li>
+        <li data-lang="instr1"><strong>Trascina</strong> il bottone "❄ FAI NEVICARE" nella barra dei preferiti del tuo browser</li>
+        <li data-lang="instr2"><strong>Vai</strong> su qualsiasi sito (Facebook, LinkedIn, Twitter, qualsiasi pagina!)</li>
+        <li data-lang="instr3"><strong>Clicca</strong> il bookmark nella barra</li>
+        <li data-lang="instr4"><strong>BOOM!</strong> Neve ovunque! ❄</li>
+        <li data-lang="instr5"><strong>Clicca di nuovo</strong> per fermare la neve</li>
       </ol>
     </div>
     
     <div class="demo-section">
-      <h2>🎮 Prova Demo</h2>
-      <p style="margin-bottom: 1rem;">Clicca per vedere l'effetto neve su questa pagina!</p>
-      <button class="demo-btn" onclick="toggleDemoSnow()">
-        ❄️ ATTIVA/DISATTIVA DEMO
+      <h2 data-lang="demoTitle">→ Prova Demo</h2>
+      <p style="margin-bottom: 1rem;" data-lang="demoDesc">Clicca per vedere l'effetto neve su questa pagina!</p>
+      <button class="demo-btn" onclick="toggleDemoSnow()" data-lang="demoBtn">
+        ❄ ATTIVA/DISATTIVA DEMO
       </button>
     </div>
     
     <div class="features">
       <div class="feature">
-        <div class="feature-icon">❄️</div>
-        <strong>1000 snowflakes</strong><br>
-        Beautiful & realistic
+        <div class="feature-icon">❄</div>
+        <div><strong>1000 fiocchi</strong><br>Belli e realistici</div>
       </div>
       <div class="feature">
-        <div class="feature-icon">🚀</div>
-        <strong>WebGL GPU</strong><br>
-        Native rendering
+        <div class="feature-icon">▸</div>
+        <div><strong>WebGL GPU</strong><br>Rendering nativo</div>
       </div>
       <div class="feature">
-        <div class="feature-icon">📱</div>
-        <strong>Responsive</strong><br>
-        Funziona su mobile
+        <div class="feature-icon">◊</div>
+        <div><strong>Responsive</strong><br>Funziona su mobile</div>
       </div>
       <div class="feature">
-        <div class="feature-icon">🌐</div>
-        <strong>Universale</strong><br>
-        99% dei siti web
+        <div class="feature-icon">●</div>
+        <div><strong>Universale</strong><br>99% dei siti web</div>
       </div>
       <div class="feature">
-        <div class="feature-icon">🔄</div>
-        <strong>Toggle ON/OFF</strong><br>
-        Click per attivare/disattivare
+        <div class="feature-icon">⟲</div>
+        <div><strong>ON/OFF</strong><br>Clicca per attivare</div>
       </div>
       <div class="feature">
-        <div class="feature-icon">✨</div>
-        <strong>Zero Install</strong><br>
-        Nessuna estensione
+        <div class="feature-icon">✦</div>
+        <div><strong>Zero Install</strong><br>Nessuna estensione</div>
       </div>
     </div>
   </div>
   
   <footer>
-    Made with ❄️ by <a href="https://digitalengineered.ai" target="_blank">DIGITALENGINEERED.AI</a><br>
+    Creato con ❄ da <a href="https://digitalengineered.ai" target="_blank">DIGITALENGINEERED.AI</a><br>
     TITAN PROTOCOL v4.5 Certified
   </footer>
   
   <script>
+    let currentLang = 'it';
+    const translations = {
+      it: {
+        subtitle: '1000 Fiocchi di Neve | WebGL GPU | Qualsiasi Sito',
+        drag: '↓ TRASCINA QUESTO BOTTONE NEI TUOI PREFERITI ↓',
+        engineering: 'Questa è ingegneria.<br>WebGL nativo, 1000 particelle, 60 FPS garantiti.',
+        instrTitle: '→ Come usarlo',
+        instr1: '<strong>Trascina</strong> il bottone "❄ FAI NEVICARE" nella barra dei preferiti del tuo browser',
+        instr2: '<strong>Vai</strong> su qualsiasi sito (Facebook, LinkedIn, Twitter, qualsiasi pagina!)',
+        instr3: '<strong>Clicca</strong> il bookmark nella barra',
+        instr4: '<strong>BOOM!</strong> Neve ovunque! ❄',
+        instr5: '<strong>Clicca di nuovo</strong> per fermare la neve',
+        demoTitle: '→ Prova Demo',
+        demoDesc: 'Clicca per vedere l\'effetto neve su questa pagina!',
+        demoBtn: '❄ ATTIVA/DISATTIVA DEMO',
+        feat1: '<strong>1000 fiocchi</strong><br>Belli e realistici',
+        feat2: '<strong>WebGL GPU</strong><br>Rendering nativo',
+        feat3: '<strong>Responsive</strong><br>Funziona su mobile',
+        feat4: '<strong>Universale</strong><br>99% dei siti web',
+        feat5: '<strong>ON/OFF</strong><br>Clicca per attivare',
+        feat6: '<strong>Zero Install</strong><br>Nessuna estensione',
+        footer: 'Creato con ❄ da'
+      },
+      en: {
+        subtitle: '1000 Snowflakes | WebGL GPU | Any Website',
+        drag: '↓ DRAG THIS BUTTON TO YOUR BOOKMARKS ↓',
+        engineering: 'This is engineering.<br>Native WebGL, 1000 particles, 60 FPS guaranteed.',
+        instrTitle: '→ How to use',
+        instr1: '<strong>Drag</strong> the "❄ FAI NEVICARE" button to your browser\'s bookmarks bar',
+        instr2: '<strong>Go</strong> to any website (Facebook, LinkedIn, Twitter, any page!)',
+        instr3: '<strong>Click</strong> the bookmark in the bar',
+        instr4: '<strong>BOOM!</strong> Snow everywhere! ❄',
+        instr5: '<strong>Click again</strong> to stop the snow',
+        demoTitle: '→ Try Demo',
+        demoDesc: 'Click to see the snow effect on this page!',
+        demoBtn: '❄ ACTIVATE/DEACTIVATE DEMO',
+        feat1: '<strong>1000 snowflakes</strong><br>Beautiful & realistic',
+        feat2: '<strong>WebGL GPU</strong><br>Native rendering',
+        feat3: '<strong>Responsive</strong><br>Works on mobile',
+        feat4: '<strong>Universal</strong><br>99% of websites',
+        feat5: '<strong>ON/OFF</strong><br>Click to activate',
+        feat6: '<strong>Zero Install</strong><br>No extension',
+        footer: 'Made with ❄ by'
+      }
+    };
+    
+    document.getElementById('langToggle').addEventListener('click', function() {
+      currentLang = currentLang === 'it' ? 'en' : 'it';
+      this.textContent = currentLang === 'it' ? '🇮🇹 IT' : '🇬🇧 EN';
+      
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        if (translations[currentLang][key]) {
+          el.innerHTML = translations[currentLang][key];
+        }
+      });
+      
+      // Update features
+      const features = document.querySelectorAll('.feature');
+      features.forEach((feat, i) => {
+        const content = feat.querySelector('strong')?.parentElement;
+        if (content) content.innerHTML = translations[currentLang]['feat' + (i+1)];
+      });
+      
+      // Update footer
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.innerHTML = translations[currentLang].footer + ' <a href="https://digitalengineered.ai" target="_blank">DIGITALENGINEERED.AI</a><br>TITAN PROTOCOL v4.5 Certified';
+      }
+    });
+    
     let demoSnowActive = false;
     
     function toggleDemoSnow() {
@@ -375,7 +456,7 @@
     // Prevent default link behavior for bookmarklet
     document.querySelector('.bookmarklet-btn').addEventListener('click', function(e) {
       e.preventDefault();
-      alert('💡 Trascina questo bottone nei preferiti!\n\nNon cliccarlo qui, ma trascinalo nella barra dei preferiti del tuo browser.');
+      alert('→ Trascina questo bottone nei preferiti!\n\nNon cliccarlo qui, ma trascinalo nella barra dei preferiti del tuo browser.');
     });
   </script>
   
