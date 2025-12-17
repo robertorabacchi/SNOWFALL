@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>❄️ Snowfall Bookmarklet - Fai Nevicare Ovunque!</title>
+  <meta name="description" content="Bookmarklet magico che fa nevicare su qualsiasi sito web! Facebook, LinkedIn, Twitter - ovunque con un solo click!">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="❄️ Snowfall Bookmarklet - Fai Nevicare Ovunque!">
+  <meta property="og:description" content="Bookmarklet magico che fa nevicare su qualsiasi sito web con un solo click!">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+    
+    .bookmarklet-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    
+    .drag-instruction {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: #ffd700;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .bookmarklet-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 700;
+      padding: 1.5rem 3rem;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      cursor: move;
+      border: 3px solid rgba(255,255,255,0.5);
+      position: relative;
+    }
+    
+    .bookmarklet-btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    
+    .bookmarklet-btn:active {
+      transform: translateY(-2px) scale(1.02);
+    }
+    
+    .arrow-down {
+      font-size: 2rem;
+      margin-top: 1rem;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+    
+    .instructions {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-top: 2rem;
+      text-align: left;
+    }
+    
+    .instructions h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .instructions ol {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      padding-left: 1.5rem;
+    }
+    
+    .instructions li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .demo-section {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+    }
+    
+    .demo-btn {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid #fff;
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .demo-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .feature {
+      background: rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+    
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    footer {
+      margin-top: 3rem;
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    footer a {
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Snow effect for demo */
+    #demo-snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999999;
+      overflow: hidden;
+    }
+    
+    .demo-snowflake {
+      position: absolute;
+      top: -10%;
+      font-size: 1.5rem;
+      color: #fff;
+      opacity: 0.8;
+      user-select: none;
+      animation: demo-snowfall linear infinite;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+    
+    @keyframes demo-snowfall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      .subtitle {
+        font-size: 1.2rem;
+      }
+      .bookmarklet-btn {
+        font-size: 1.4rem;
+        padding: 1.2rem 2rem;
+      }
+      .bookmarklet-box {
+        padding: 2rem 1rem;
+      }
+      .demo-snowflake {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <h1>❄️ Snowfall Bookmarklet</h1>
+    <p class="subtitle">Fai nevicare su qualsiasi sito web con un solo click!</p>
+    
+    <div class="bookmarklet-box">
+      <p class="drag-instruction">
+        👇 TRASCINA QUESTO BOTTONE NEI TUOI PREFERITI 👇
+      </p>
+      
+      <a href="javascript:(function(){if(document.getElementById('titan-snow-effect')){document.getElementById('titan-snow-effect').remove();document.getElementById('titan-snow-styles').remove();return}const s=document.createElement('style');s.id='titan-snow-styles';s.textContent='#titan-snow-effect{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999999;overflow:hidden}.titan-snowflake{position:absolute;top:-10%;font-size:1.5rem;color:%23fff;opacity:.8;user-select:none;animation:titan-snowfall linear infinite;text-shadow:0 0 5px rgba(255,255,255,.5);will-change:transform,opacity;transform:translateZ(0)}@keyframes titan-snowfall{0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}10%{opacity:.8}90%{opacity:.8}100%{transform:translateY(110vh) translateX(100px) rotate(360deg);opacity:0}}@media (max-width:768px){.titan-snowflake{font-size:1.2rem}}';document.head.appendChild(s);const c=document.createElement('div');c.id='titan-snow-effect';for(let i=0;i<100;i++){const f=document.createElement('div');f.className='titan-snowflake';f.textContent='❄';f.style.left=Math.random()*100+'%';f.style.animationDelay=Math.random()*10+'s';f.style.animationDuration=(6+Math.random()*6)+'s';c.appendChild(f)}document.body.appendChild(c);const n=document.createElement('div');n.textContent='❄️ Snow activated! Click again to stop.';n.style.cssText='position:fixed;top:20px;right:20px;background:rgba(0,0,0,.8);color:white;padding:15px 20px;border-radius:10px;font-family:Arial,sans-serif;font-size:14px;z-index:9999999';document.body.appendChild(n);setTimeout(()=>{n.style.transition='opacity 0.3s';n.style.opacity='0';setTimeout(()=>n.remove(),300)},3000)})();" 
+         class="bookmarklet-btn"
+         onclick="return false;">
+        ❄️ FAI NEVICARE
+      </a>
+      
+      <div class="arrow-down">⬇️</div>
+    </div>
+    
+    <div class="instructions">
+      <h2>📖 Come usarlo</h2>
+      <ol>
+        <li><strong>Trascina</strong> il bottone "❄️ FAI NEVICARE" nella barra dei preferiti del tuo browser</li>
+        <li><strong>Vai</strong> su qualsiasi sito (Facebook, LinkedIn, Twitter, qualsiasi pagina!)</li>
+        <li><strong>Clicca</strong> il bookmark nella barra</li>
+        <li><strong>BOOM!</strong> Neve ovunque! ❄️</li>
+        <li><strong>Clicca di nuovo</strong> per fermare la neve</li>
+      </ol>
+    </div>
+    
+    <div class="demo-section">
+      <h2>🎮 Prova Demo</h2>
+      <p style="margin-bottom: 1rem;">Clicca per vedere l'effetto neve su questa pagina!</p>
+      <button class="demo-btn" onclick="toggleDemoSnow()">
+        ❄️ ATTIVA/DISATTIVA DEMO
+      </button>
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <strong>100 fiocchi</strong><br>
+        Neve densa e realistica
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🚀</div>
+        <strong>GPU Accelerated</strong><br>
+        Performance ottimali
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📱</div>
+        <strong>Responsive</strong><br>
+        Funziona su mobile
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌐</div>
+        <strong>Universale</strong><br>
+        99% dei siti web
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔄</div>
+        <strong>Toggle ON/OFF</strong><br>
+        Click per attivare/disattivare
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✨</div>
+        <strong>Zero Install</strong><br>
+        Nessuna estensione
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    Made with ❄️ by <a href="https://digitalengineered.ai" target="_blank">DIGITALENGINEERED.AI</a><br>
+    TITAN PROTOCOL v4.5 Certified
+  </footer>
+  
+  <script>
+    let demoSnowActive = false;
+    
+    function toggleDemoSnow() {
+      const existingSnow = document.getElementById('demo-snow-container');
+      
+      if (existingSnow) {
+        existingSnow.remove();
+        demoSnowActive = false;
+        return;
+      }
+      
+      const container = document.createElement('div');
+      container.id = 'demo-snow-container';
+      
+      for (let i = 0; i < 100; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'demo-snowflake';
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.animationDelay = Math.random() * 10 + 's';
+        snowflake.style.animationDuration = (6 + Math.random() * 6) + 's';
+        container.appendChild(snowflake);
+      }
+      
+      document.body.appendChild(container);
+      demoSnowActive = true;
+    }
+    
+    // Prevent default link behavior for bookmarklet
+    document.querySelector('.bookmarklet-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      alert('💡 Trascina questo bottone nei preferiti!\n\nNon cliccarlo qui, ma trascinalo nella barra dei preferiti del tuo browser.');
+    });
+  </script>
+  
+</body>
+</html>
